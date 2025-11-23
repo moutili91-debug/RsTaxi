@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RS TAXI – Chauffeur Électrique Premium Antibes (PACA)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
+    
+    <style>
+        /* Variables pour les couleurs et le thème */
+        :root {
+            --color-dark-blue: #0A192F; /* Bleu Nuit Profond (Fond Principal) */
+            --color-yellow: #FFD700;    /* Jaune du logo (Accent) */
+            --color-white: #FFFFFF;
+            --color-text-light: #CCCCCC;
+            --color-light-grey: #F8F8F8; /* Couleur pour la section services et avis */
+            --color-dark-grey: #333333; /* Couleur pour le texte foncé */
+            --color-lighter-blue: #1C335A; /* Pour les fonds de sections sombres */
+        }
+        
+        /* Styles Généraux */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--color-dark-blue);
+            color: var(--color-text-light);
+            line-height: 1.6;
+            overflow-x: hidden; /* Empêche le défilement horizontal */
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ----- ANIMATION D'INTRODUCTION (SPLASH SCREEN) ----- */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-dark-blue);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; 
+            opacity: 1;
+            transition: opacity 1s ease-out;
+        }
+
+        #splash-screen.hidden {
+            opacity: 0;
+            pointer-events: none; 
+        }
+
+        .splash-text {
+            color: var(--color-yellow);
+            font-size: 4rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            animation: fadeInOut 2s ease-in-out forwards; 
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(20px); }
+            50% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); }
+        }
+
+        /* ----- HEADER / Navigation ----- */
+        .main-header {
+            background-color: transparent; /* Fond transparent pour voir l'image de fond */
+            padding: 20px 0;
+            position: absolute; 
+            width: 100%;
+            z-index: 20;
+            transition: background-color 0.3s ease; /* Transition pour le fond au scroll */
+        }
+        
+        /* Changement de fond du header au scroll */
+        .main-header.scrolled {
+            background-color: rgba(10, 25, 47, 0.95); 
+        }
+
+        .main-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .site-logo {
+            height: 60px; /* Logo plus gros */
+            transition: transform 0.3s ease; 
+        }
+
+        .site-logo:hover {
+            transform: scale(1.05); 
+        }
+        
+        .main-nav a {
+            color: var(--color-white);
+            text-decoration: none;
+            margin-left: 35px; /* Plus d'espace */
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 1.1rem; /* Texte un peu plus grand */
+            transition: color 0.3s;
+        }
+        
+        .main-nav a:hover {
+            color: var(--color-yellow);
+        }
+
+        /* ----- SECTION HÉRO (Bannière) ----- */
+        .hero-section {
+            position: relative;
+            height: 100vh;
+            background-image: url('image1.png'); /* Votre image Tesla/Côte d'Azur */
+            background-size: cover;
+            background-position: center center;
+            display: flex;
+            flex-direction: column; 
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 80px; 
+            color: var(--color-white); /* Texte blanc par défaut */
+        }
+        
+        /* FILTRE D'IMAGE RETIRÉ - AUCUN .hero-overlay */
+        
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            background-color: rgba(10, 25, 47, 0.5); /* Léger fond pour la lisibilité */
+            padding: 30px 50px;
+            border-radius: 10px;
+            max-width: 800px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+        }
+        
+        .hero-content h1 {
+            color: var(--color-white);
+            font-size: 3.8rem; /* Plus grand */
+            margin-bottom: 15px; 
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9);
+        }
+        
+        .hero-content p {
+            color: var(--color-text-light);
+            font-size: 1.6rem; /* Plus grand */
+            margin-bottom: 50px; /* Plus d'espace avant le bouton */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
+        }
+        
+        /* Bouton WhatsApp (Jaune vif) */
+        .btn-whatsapp {
+            display: inline-block;
+            padding: 18px 45px; /* Plus grand */
+            background-color: var(--color-yellow);
+            color: var(--color-dark-blue);
+            text-decoration: none;
+            font-size: 1.4rem; /* Plus grand */
+            font-weight: 900;
+            border-radius: 8px; /* Bords légèrement arrondis */
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.5); /* Ombre plus prononcée */
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        
+        .btn-whatsapp:hover {
+            background-color: #FFC700;
+            transform: translateY(-3px) scale(1.01); /* Effet léger au survol */
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.7);
+        }
+        
+        .btn-whatsapp i {
+            margin-right: 12px;
+        }
+
+        /* ----- SECTION SERVICES ----- */
+        .services-section {
+            background-color: var(--color-light-grey); 
+            padding: 80px 0; /* Plus de padding */
+            color: var(--color-dark-grey); 
+        }
+
+        .services-section h2 {
+            color: var(--color-dark-blue); 
+            font-size: 2.8rem; /* Titre plus grand */
+            text-align: center;
+            margin-bottom: 50px; /* Plus d'espace */
+            text-transform: uppercase;
+            font-weight: 900;
+        }
+
+        .service-item-card {
+            background-color: var(--color-white);
+            border-left: 8px solid var(--color-yellow); /* Liseré Jaune plus épais */
+            border-radius: 10px; /* Bords plus arrondis */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Ombre plus douce */
+            margin-bottom: 30px; /* Plus d'espace entre les cartes */
+            padding: 30px; /* Plus de padding interne */
+            display: flex;
+            align-items: center;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+        }
+
+        .service-item-card:hover {
+            transform: translateY(-7px); /* Effet de levée plus prononcé */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        .service-item-card .icon {
+            font-size: 3rem; /* Icônes plus grandes */
+            color: var(--color-yellow);
+            margin-right: 25px; /* Plus d'espace */
+        }
+
+        .service-item-card h3 {
+            color: var(--color-dark-blue);
+            font-size: 1.6rem; /* Texte plus grand */
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .service-item-card p {
+            font-size: 1.1rem; /* Texte plus grand */
+            color: var(--color-dark-grey);
+        }
+
+        .service-item-card .arrow-icon {
+            margin-left: auto; 
+            font-size: 1.8rem; /* Flèche plus grande */
+            color: var(--color-dark-blue);
+        }
+
+        /* ----- SECTION AVIS GOOGLE (Nouveau) ----- */
+        .reviews-section {
+            background-color: var(--color-lighter-blue); /* Fond bleu un peu plus clair */
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .reviews-section h2 {
+            color: var(--color-yellow);
+            font-size: 2.8rem;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            font-weight: 900;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 3 colonnes, s'adapte */
+            gap: 30px;
+        }
+
+        .review-card {
+            background-color: var(--color-dark-blue);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            text-align: left;
+            position: relative;
+            color: var(--color-white);
+        }
+
+        .review-card .stars {
+            color: var(--color-yellow);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .review-card p {
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .review-card .author {
+            font-weight: bold;
+            color: var(--color-text-light);
+            font-size: 0.95rem;
+        }
+        
+        /* Bouton "Voir plus d'avis" */
+        .btn-more-reviews {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--color-dark-blue);
+            color: var(--color-yellow);
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 50px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn-more-reviews:hover {
+            background-color: var(--color-lighter-blue);
+            transform: translateY(-2px);
+        }
+
+        /* ----- SECTION CONTACT DÉDIÉE ----- */
+        .contact-section {
+            background-color: var(--color-dark-blue); 
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .contact-section h2 {
+            color: var(--color-yellow);
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            font-weight: 900;
+        }
+
+        .contact-info-block {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            background-color: var(--color-lighter-blue);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            color: var(--color-white);
+        }
+        
+        .contact-info-block p {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-info-block p i {
+            margin-right: 15px;
+            color: var(--color-yellow);
+            font-size: 1.5rem;
+        }
+
+        .contact-button-main {
+            display: inline-block;
+            padding: 15px 40px;
+            background-color: var(--color-yellow); 
+            color: var(--color-dark-blue);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 900;
+            border-radius: 8px; 
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            text-transform: uppercase;
+        }
+
+        .contact-button-main:hover {
+            background-color: #FFC700;
+            transform: scale(1.02);
+        }
+
+        .contact-button-main i {
+            margin-right: 15px;
+        }
+        
+        /* ----- FOOTER ----- */
+        .main-footer {
+            background-color: #000000;
+            color: var(--color-text-light);
+            padding: 30px 0; /* Plus de padding */
+            text-align: center;
+            font-size: 1rem;
+        }
+        .main-footer p {
+            margin-bottom: 8px;
+        }
+
+        /* ----- RESPONSIVE DESIGN (Media Queries) ----- */
+        @media (max-width: 992px) {
+            .main-nav a {
+                margin-left: 20px;
+                font-size: 1rem;
+            }
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+            .hero-content p {
+                font-size: 1.4rem;
+            }
+            .reviews-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-header .container {
+                flex-direction: column;
+                padding-bottom: 10px;
+            }
+            .main-nav {
+                margin-top: 15px;
+            }
+            .main-nav a {
+                margin: 0 10px;
+                font-size: 0.9rem;
+            }
+
+            .site-logo {
+                height: 45px;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+            .btn-whatsapp {
+                padding: 15px 30px;
+                font-size: 1.1rem;
+            }
+
+            .services-section h2, .reviews-section h2, .contact-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .service-item-card {
+                padding: 25px;
+                flex-direction: column; 
+                text-align: center;
+            }
+            .service-item-card .icon {
+                margin: 0 0 20px 0; 
+            }
+            .service-item-card h3 {
+                font-size: 1.3rem;
+            }
+            .service-item-card p {
+                font-size: 1rem;
+            }
+            .service-item-card .arrow-icon {
+                margin-top: 20px;
+                margin-left: 0; 
+            }
+            .contact-button-main {
+                font-size: 1.2rem;
+                padding: 12px 30px;
+            }
+            .contact-info-block p {
+                font-size: 1rem;
+            }
+            .contact-info-block p i {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            .hero-content p {
+                font-size: 1rem;
+            }
+            .main-nav a {
+                font-size: 0.85rem;
+                margin: 0 5px;
+            }
+            .splash-text {
+                font-size: 2.5rem;
+                letter-spacing: 2px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="splash-screen">
+        <span class="splash-text">RS TAXI</span>
+    </div>
+
+    <header class="main-header">
+        <div class="container">
+            <img src="logo.png" alt="RS Taxi Logo" class="site-logo">
+            <nav class="main-nav">
+                <a href="#accueil">Accueil</a>
+                <a href="#services">Services</a>
+                <a href="#avis">Avis</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <section id="accueil" class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1>RS TAXI - ANTIBES & CÔTE AZUR</h1>
+                <p>Votre Chauffeur Électrique Premium 24/7. Luxe, Confort et Écologie.</p>
+                
+                <a href="https://wa.me/336XXXXXXXX" target="_blank" class="btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i> RÉSERVEZ PAR WHATSAPP
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <section id="services" class="services-section">
+        <div class="container">
+            <h2>NOS SERVICES</h2>
+            
+            <div class="service-item-card">
+                <i class="fas fa-bolt icon"></i>
+                <div>
+                    <h3>VÉHICULE 100% ÉLECTRIQUE - CONFORT & ÉCOLOGIE</h3>
+                    <p>Voyagez à bord de notre Tesla Model 3 Performance 2025. Confort premium, silence et zéro émission pour une expérience de transport responsable et dynamique.</p>
+                </div>
+                <i class="fas fa-arrow-right arrow-icon"></i>
+            </div>
+
+            <div class="service-item-card">
+                <i class="fas fa-plane icon"></i>
+                <div>
+                    <h3>TRANSFERTS AÉROPORTS / GARES</h3>
+                    <p>Ponctualité assurée pour vos transferts vers ou depuis l'Aéroport Nice Côte d'Azur (NCE), les gares TGV (Nice, Cannes, Antibes). Suivi des vols/trains en temps réel et prise en charge personnalisée.</p>
+                </div>
+                <i class="fas fa-arrow-right arrow-icon"></i>
+            </div>
+
+            <div class="service-item-card">
+                <i class="fas fa-road icon"></i>
+                <div>
+                    <h3>LONGUES DISTANCES</h3>
+                    <p>Déplacez-vous en toute sérénité sur de longues distances. Que ce soit pour un voyage d'affaires ou une escapade sur la Côte d'Azur, profitez d'un confort exceptionnel.</p>
+                </div>
+                <i class="fas fa-arrow-right arrow-icon"></i>
+            </div>
+
+            <div class="service-item-card">
+                <i class="fas fa-hourglass-half icon"></i>
+                <div>
+                    <h3>MISE À DISPOSITION</h3>
+                    <p>Votre chauffeur privé et votre Tesla sont à votre entière disposition pour une durée définie. Idéal pour vos événements, rendez-vous d'affaires ou visites touristiques personnalisées.</p>
+                </div>
+                <i class="fas fa-arrow-right arrow-icon"></i>
+            </div>
+
+            <div class="service-item-card">
+                <i class="fas fa-briefcase icon"></i>
+                <div>
+                    <h3>TRANSPORT PROFESSIONNEL</h3>
+                    <p>Un service discret et fiable pour vos clients, collaborateurs ou déplacements d'affaires. Profitez d'une facturation simplifiée et d'un confort adapté à vos exigences professionnelles.</p>
+                </div>
+                <i class="fas fa-arrow-right arrow-icon"></i>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="avis" class="reviews-section">
+        <div class="container">
+            <h2>ILS NOUS FONT CONFIANCE</h2>
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p>"Service impeccable ! Le chauffeur est ponctuel, le véhicule est confortable et silencieux. Je recommande vivement RS TAXI pour tous vos trajets sur la Côte d'Azur."</p>
+                    <div class="author">Jean-Luc P.</div>
+                </div>
+                <div class="review-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p>"Une expérience de voyage de luxe. La Tesla est un plaisir à conduire et le professionnalisme du chauffeur est irréprochable. C'est mon nouveau service de taxi préféré."</p>
+                    <div class="author">Sophie R.</div>
+                </div>
+                <div class="review-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <p>"Très bon service, voiture très propre. Juste un petit retard dû au trafic, mais le chauffeur a prévenu en avance. Très appréciable. Je ferai appel à eux de nouveau."</p>
+                    <div class="author">Marc D.</div>
+                </div>
+            </div>
+            <a href="https://g.page/r/YOUR-GOOGLE-BUSINESS-PROFILE-LINK/review" target="_blank" class="btn-more-reviews">
+                Voir plus d'avis Google <i class="fas fa-external-link-alt"></i>
+            </a>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2>CONTACTEZ-NOUS</h2>
+            <p>Nous sommes disponibles 24h/24, 7j/7 pour toutes vos demandes.</p>
+            <div class="contact-info-block">
+                <p><i class="fas fa-phone-alt"></i> Téléphone : [Votre Tél]</p>
+                <p><i class="fas fa-envelope"></i> Email : [Votre Email]</p>
+                <p><i class="fas fa-map-marker-alt"></i> Zone de service : Antibes, Cannes, Nice & Toute la Côte d'Azur</p>
+            </div>
+            <a href="https://wa.me/336XXXXXXXX" target="_blank" class="contact-button-main">
+                <i class="fab fa-whatsapp"></i> RÉSERVER OU DEMANDER UN DEVIS
+            </a>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 RS TAXI. Tous droits réservés.</p>
+            <p>Développé avec passion pour votre confort.</p>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript pour gérer l'animation d'introduction
+        window.addEventListener('load', () => {
+            const splashScreen = document.getElementById('splash-screen');
+            setTimeout(() => {
+                splashScreen.classList.add('hidden');
+            }, 2500); // 2.5 secondes
+        });
+
+        // JavaScript pour le changement de fond du header au scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.main-header');
+            if (window.scrollY > 50) { // Si l'on a scrollé de plus de 50px
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
+
+</body>
+</html>

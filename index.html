@@ -46,13 +46,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--color-dark-blue);
+            background-color: var(--color-dark-blue); /* Votre bleu nuit */
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 9999; 
             opacity: 1;
-            transition: opacity 1s ease-out;
+            transition: opacity 1s 2.5s ease-out; /* Ajout d'un délai avant l'estompage */
         }
 
         #splash-screen.hidden {
@@ -60,19 +60,109 @@
             pointer-events: none; 
         }
 
-        .splash-text {
-            color: var(--color-yellow);
-            font-size: 4rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            animation: fadeInOut 2s ease-in-out forwards; 
+       .splash-animation-container {
+            position: relative;
+            width: 350px; /* Légèrement plus large pour l'animation */
+            height: 150px; /* AUGMENTE LA HAUTEUR pour ne pas couper le logo */
+            overflow: hidden; /* Cache le taxi avant son entrée */
+            display: flex; /* Centrer le logo et le taxi verticalement */
+            align-items: center;
+            justify-content: center;
+        }
+        
+        
+        /* Élément du Taxi (la forme qui bouge) - Plus détaillé */
+        .taxi-slide {
+            position: absolute;
+            top: 50%;
+            left: -150px; /* Commence hors écran à gauche */
+            transform: translateY(-50%);
+            width: 150px; /* Largeur de la carrosserie */
+            height: 40px; /* Hauteur de la carrosserie */
+            background: linear-gradient(to right, #f0e68c, var(--color-yellow), #f0e68c); /* Dégradé jaune */
+            border-radius: 8px; /* Forme de voiture légèrement arrondie */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Légère ombre */
+            animation: taxiSlide 1.5s ease-out forwards;
+            display: flex; /* Pour les roues */
+            align-items: flex-end; /* Pour positionner les roues en bas */
+            justify-content: space-around; /* Espace les roues */
+            padding: 0 10px 5px 10px; /* Espacement pour les roues */
+        }
+        
+        /* Simule les roues du taxi */
+        .taxi-slide::before,
+        .taxi-slide::after {
+            content: '';
+            position: absolute;
+            bottom: -10px; /* Position sous la carrosserie */
+            width: 25px;
+            height: 25px;
+            background: #333; /* Couleur des roues */
+            border-radius: 50%; /* Forme ronde */
+            border: 3px solid #666; /* Bordure grise */
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5); /* Ombre interne */
+            z-index: 10; /* Pour qu'elles soient au-dessus */
         }
 
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateY(20px); }
-            50% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-20px); }
+        .taxi-slide::before { /* Roue avant */
+            left: 15px; 
+        }
+
+        .taxi-slide::after { /* Roue arrière */
+            right: 15px;
+        }
+
+        /* Enseigne lumineuse du taxi (sur le toit) */
+        .taxi-slide-light { /* NOUVEL ÉLÉMENT : créez cette div dans le HTML si elle n'existe pas */
+            content: 'TAXI'; /* Texte de l'enseigne */
+            position: absolute;
+            top: -25px; /* Position au-dessus du taxi */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px; /* Largeur de l'enseigne */
+            height: 20px; /* Hauteur de l'enseigne */
+            background: var(--color-yellow); /* Couleur jaune */
+            color: var(--color-dark-blue); /* Texte bleu foncé */
+            font-size: 0.7em;
+            font-weight: bold;
+            text-align: center;
+            line-height: 20px; /* Centre verticalement le texte */
+            border-radius: 5px 5px 0 0;
+            box-shadow: 0 -2px 8px rgba(255, 215, 0, 0.6); /* Effet lumineux */
+            /* Ajout d'une animation légère pour simuler la lumière */
+            animation: pulseLight 1s infinite alternate;
+        }
+        
+        @keyframes pulseLight {
+            0% { box-shadow: 0 -2px 8px rgba(255, 215, 0, 0.6); }
+            100% { box-shadow: 0 -2px 12px rgba(255, 215, 0, 0.8); }
+        }
+        /* Logo RS TAXI (apparaît après le taxi) */
+        .splash-logo {
+            opacity: 0;
+            transform: scale(0.8);
+            animation: logoFadeIn 1s ease-out 1.5s forwards; /* Apparaît après le taxi */
+            position: absolute; /* Permet un positionnement libre */
+        }
+        
+        .splash-logo img {
+            width: 100%; /* S'adapte à la largeur du conteneur */
+            max-width: 300px; /* Limite la largeur maximale */
+            height: auto; /* Maintient les proportions */
+            display: block; /* Supprime l'espace sous l'image */
+        }
+
+        /* Keyframes: Mouvement du Taxi */
+        @keyframes taxiSlide {
+            0% { left: -150px; }
+            50% { left: 50%; transform: translate(-50%, -50%); } /* S'arrête au milieu */
+            100% { left: 100%; transform: translate(0, -50%); } /* Sort par la droite */
+        }
+
+        /* Keyframes: Apparition du Logo */
+        @keyframes logoFadeIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
         /* ----- HEADER / Navigation ----- */
@@ -486,10 +576,16 @@
 </head>
 <body>
 
-    <div id="splash-screen">
-        <span class="splash-text">RS TAXI</span>
-    </div>
+   <div id="splash-screen">
+        <div class="splash-animation-container">
+            <div class="taxi-slide">
+                <div class="taxi-slide-light"></div> </div>
 
+            <div class="splash-logo">
+                <img src="logo.png" alt="RS Taxi Logo Animation">
+            </div>
+        </div>
+    </div>
     <header class="main-header">
         <div class="container">
             <img src="logo.png" alt="RS Taxi Logo" class="site-logo">
@@ -506,10 +602,13 @@
         <div class="container">
             <div class="hero-content">
                 <h1>RS TAXI - ANTIBES & CÔTE AZUR</h1>
-                <p>Votre Chauffeur Électrique Premium 24/7. Luxe, Confort et Écologie.</p>
+                <p>
+    Chauffeur Conventionné CPAM 🚑 & Chauffeur Privé 🚕.<br>
+    Disponible 24h/24 & 7j/7.
+</p>
                 
-                <a href="https://wa.me/336XXXXXXXX" target="_blank" class="btn-whatsapp">
-                    <i class="fab fa-whatsapp"></i> RÉSERVEZ PAR WHATSAPP
+                <a href="https://wa.me/33651577188?text=Bonjour,%20j'aimerais%20réserver%20un%20taxi.%20Merci%20!" target="_blank" class="btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i> RÉSERVEZ MAINTENANT
                 </a>
             </div>
         </div>
@@ -519,13 +618,28 @@
         <div class="container">
             <h2>NOS SERVICES</h2>
             
+           <div class="service-item-card">
+                <i class="fas fa-prescription-bottle-alt icon"></i> <div>
+                    <h3>TRANSPORT MÉDICAL CONVENTIONNÉ (CPAM)</h3>
+                    <p>Nous assurons vos déplacements pour rendez-vous médicaux, consultations ou hospitalisations. Service conventionné CPAM, discret et confortable, adapté à vos besoins spécifiques.</p>
+                </div>
+                
+            </div>
+
+            <div class="service-item-card">
+                <i class="fas fa-user-tie icon"></i> <div>
+                    <h3>VOTRE CHAUFFEUR PRIVÉ DÉDIÉ</h3>
+                    <p>Bénéficiez d'un service haut de gamme avec un chauffeur privé discret et professionnel pour tous vos déplacements personnels ou événements spéciaux. Exclusivité et flexibilité.</p>
+                </div>
+                
+            </div>
+
             <div class="service-item-card">
                 <i class="fas fa-bolt icon"></i>
                 <div>
                     <h3>VÉHICULE 100% ÉLECTRIQUE - CONFORT & ÉCOLOGIE</h3>
                     <p>Voyagez à bord de notre Tesla Model 3 Performance 2025. Confort premium, silence et zéro émission pour une expérience de transport responsable et dynamique.</p>
                 </div>
-                <i class="fas fa-arrow-right arrow-icon"></i>
             </div>
 
             <div class="service-item-card">
@@ -534,7 +648,7 @@
                     <h3>TRANSFERTS AÉROPORTS / GARES</h3>
                     <p>Ponctualité assurée pour vos transferts vers ou depuis l'Aéroport Nice Côte d'Azur (NCE), les gares TGV (Nice, Cannes, Antibes). Suivi des vols/trains en temps réel et prise en charge personnalisée.</p>
                 </div>
-                <i class="fas fa-arrow-right arrow-icon"></i>
+             
             </div>
 
             <div class="service-item-card">
@@ -543,7 +657,7 @@
                     <h3>LONGUES DISTANCES</h3>
                     <p>Déplacez-vous en toute sérénité sur de longues distances. Que ce soit pour un voyage d'affaires ou une escapade sur la Côte d'Azur, profitez d'un confort exceptionnel.</p>
                 </div>
-                <i class="fas fa-arrow-right arrow-icon"></i>
+               
             </div>
 
             <div class="service-item-card">
@@ -552,7 +666,7 @@
                     <h3>MISE À DISPOSITION</h3>
                     <p>Votre chauffeur privé et votre Tesla sont à votre entière disposition pour une durée définie. Idéal pour vos événements, rendez-vous d'affaires ou visites touristiques personnalisées.</p>
                 </div>
-                <i class="fas fa-arrow-right arrow-icon"></i>
+                
             </div>
 
             <div class="service-item-card">
@@ -561,7 +675,7 @@
                     <h3>TRANSPORT PROFESSIONNEL</h3>
                     <p>Un service discret et fiable pour vos clients, collaborateurs ou déplacements d'affaires. Profitez d'une facturation simplifiée et d'un confort adapté à vos exigences professionnelles.</p>
                 </div>
-                <i class="fas fa-arrow-right arrow-icon"></i>
+                
             </div>
 
         </div>
@@ -604,11 +718,11 @@
             <h2>CONTACTEZ-NOUS</h2>
             <p>Nous sommes disponibles 24h/24, 7j/7 pour toutes vos demandes.</p>
             <div class="contact-info-block">
-                <p><i class="fas fa-phone-alt"></i> Téléphone : [Votre Tél]</p>
-                <p><i class="fas fa-envelope"></i> Email : [Votre Email]</p>
+                <p><i class="fas fa-phone-alt"></i> Téléphone : +33651577188</p>
+                <p><i class="fas fa-envelope"></i> Email : Redouanetaxi06@outlook.fr</p>
                 <p><i class="fas fa-map-marker-alt"></i> Zone de service : Antibes, Cannes, Nice & Toute la Côte d'Azur</p>
             </div>
-            <a href="https://wa.me/336XXXXXXXX" target="_blank" class="contact-button-main">
+            <a href="https://wa.me/33651577188?text=Bonjour,%20j'aimerais%20réserver%20un%20taxi.%20Merci%20!" target="_blank" class="contact-button-main">
                 <i class="fab fa-whatsapp"></i> RÉSERVER OU DEMANDER UN DEVIS
             </a>
         </div>
